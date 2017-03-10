@@ -8,7 +8,22 @@
   "project_page": "https://github.com/knuedge/bamboo_agent/issues",
   "issues_url": "https://github.com/knuedge/bamboo_agent",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+    {"name":"puppetlabs-stdlib","version_requirement":">= 4.5.0"},
+    {"name":"kayak-r9util", "version_requirement":">= 0.0.9"}
+  ],
+  "operatingsystem_support": [
+    {
+       "operatingsystem": "Ubuntu",
+       "operatingsystemrelease": ["14.04", "16.04"]
+    },
+    {
+       "operatingsystem": "RedHat",
+       "operatingsystemrelease": ["6","7"]
+    },
+    {
+       "operatingsystem": "CentOS",
+       "operatingsystemrelease": ["6","7"]
+    }
   ]
 }
 
