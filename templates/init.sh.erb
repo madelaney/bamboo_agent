@@ -1,0 +1,57 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: bamboo
+# Required-Start: $local_fs $remote_fs $network $time
+# Required-Stop: $local_fs $remote_fs $network $time
+# Should-Start: $syslog
+# Should-Stop: $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Atlassian Bamboo Server
+### END INIT INFO
+# INIT Script
+######################################
+
+# Note, this came from
+#   https://confluence.atlassian.com/bamboo/running-bamboo-as-a-linux-service-416056046.html
+#
+# It was then hacked on a bit to actually work. :-(
+
+# Define some variables
+# Name of app ( bamboo, Confluence, etc )
+APP=<%= @username %>
+# Name of the user to run as
+USER=<%= @username %>
+# Location of application's bin directory
+BASE=<%= @home %>
+
+case "$1" in
+  # Start command
+  start)
+    chown -R <%= @user %>:<%= @group %> $BASE
+    echo "Starting $APP"
+    /bin/su - $USER -c "export BAMBOO_HOME=${BAMBOO_HOME}; $BASE/bin/bamboo-agent.sh start &> /dev/null"
+    ;;
+  # Stop command
+  stop)
+    echo "Stopping $APP"
+    /bin/su - $USER -c "$BASE/bin/bamboo-agent.sh stop &> /dev/null"
+    echo "$APP stopped successfully"
+    ;;
+  # Restart command
+  restart)
+    $0 stop
+    sleep 5
+    $0 start
+    ;;
+  status)
+    /bin/su - $USER -c "$BASE/bin/bamboo-agent.sh status"
+    ;;
+  *)
+    echo "Usage: /etc/init.d/$APP {start|restart|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+0
