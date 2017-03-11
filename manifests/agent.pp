@@ -16,7 +16,7 @@ define bamboo_agent::agent(
   if $manage_user == true {
     user { $username:
       ensure  => present,
-      comment => 'First Last',
+      comment => "bamboo-agent ${username}",
       home    => $home,
       shell   => '/bin/bash',
       #groups  => $user_groups,
@@ -31,7 +31,7 @@ define bamboo_agent::agent(
     }
   }
   # dowload the jar
-  exec {"dowload-${title}-bamboo-agent-jar":
+  exec {"download-${title}-bamboo-agent-jar":
     command => "wget ${server_url}/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar",
     cwd     => $home,
     user    => $username,

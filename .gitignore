@@ -24,3 +24,5 @@ results.xml
 Gemfile.lock
 .bundle
 vendor/
+
+coverage/
