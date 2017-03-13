@@ -8,10 +8,30 @@ define bamboo_agent::service(
 
   assert_private()
 
-  case $::service_provider {
-    'systemd' : {
-      $init_path     = '/lib/systemd/system'
-      $init_template = 'bamboo-agent/unit.erb'
+  case $::operatingsystem {
+    'Ubuntu': {
+      case $::lsbdistcodename {
+        'xenial': {
+          $init_path     = '/lib/systemd/system'
+          $service_template = 'bamboo_agent/unit.erb'
+        }
+        default: {
+          $init_path = '/etc/init.d'
+          $service_template = 'bamboo_agent/init.sh.erb'
+        }
+      }
+    }
+    'Redhat','CentOS': {
+      case $::operatingsystemmajrelease {
+        '7': {
+          $init_path     = '/lib/systemd/system'
+          $service_template = 'bamboo_agent/unit.erb'
+        }
+        default: {
+          $init_path = '/etc/init.d'
+          $service_template = 'bamboo_agent/init.sh.erb'
+        }
+      }
     }
     default: {
       $init_path = '/etc/init.d'
