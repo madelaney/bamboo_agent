@@ -52,16 +52,20 @@ describe 'bamboo_agent::agent' do
           )
       end
     end
+    context 'it should compile' do
+      it do
+        should compile.with_all_deps
+      end
+    end
   end
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        facts
+        facts.merge({
+          :r9util_properties_lens_path => '/opt/puppetlabs/puppet/cache/lib/augeas/lenses'
+          })
       end
       it_behaves_like 'all params'
-      #it do
-      #  should compile.with_all_deps
-      #end
     end
   end
 end
