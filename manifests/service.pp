@@ -1,15 +1,18 @@
 # set up the service
-
+# @param username username of the bamboo-agent service account
+# @param home home directory of the bamboo-agent user
 define bamboo_agent::service(
   $username,
   $home,
   ){
 
+  assert_private()
+
   case $::service_provider {
-    #'systemd' : {
-    #  $init_path     = ''
-    #  $init_template = ''
-    #}
+    'systemd' : {
+      $init_path     = '/lib/systemd/system'
+      $init_template = 'bamboo-agent/unit.erb'
+    }
     default: {
       $init_path = '/etc/init.d'
       $service_template = 'bamboo_agent/init.sh.erb'
@@ -27,10 +30,8 @@ define bamboo_agent::service(
   }
 
   service { $username:
-    enable  => true,
     ensure  => running,
+    enable  => true,
     require => File[$initscript]
-    #hasrestart => true,
-    #hasstatus  => true,
   }
 }

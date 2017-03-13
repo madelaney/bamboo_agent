@@ -16,7 +16,7 @@ describe 'bamboo_agent::agent' do
       }
     }
     end
-    context 'it should createt the user' do
+    context 'it should create the user' do
       it { should contain_user('test-agent').with(
         'ensure'  => 'present',
         'comment' => 'bamboo-agent test-agent',
@@ -59,6 +59,9 @@ describe 'bamboo_agent::agent' do
         facts
       end
       it_behaves_like 'all params'
+      #it do
+      #  should compile.with_all_deps
+      #end
     end
   end
 end

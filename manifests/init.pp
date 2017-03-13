@@ -1,47 +1,54 @@
 # Class: bamboo_agent
 # ===========================
 #
-# Full description of class bamboo_agent here.
+# This simply calls on the bamboo_agent::agent defined type to create the bamboo agent(s)
 #
-# Parameters
-# ----------
+# $agents should contain a hash mapping to the parameters in the bamboo_agent::agent defined type
 #
-# Document parameters here.
-#
-# * `sample parameter`
-# Explanation of what this parameter affects and what it defaults to.
-# e.g. "Specify one or more upstream ntp servers as an array."
-#
-# Variables
-# ----------
-#
-# Here you should define a list of variables that this module would require.
-#
-# * `sample variable`
-#  Explanation of how this variable affects the function of this class and if
-#  it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#  External Node Classifier as a comma separated list of hostnames." (Note,
-#  global variables should be avoided in favor of class parameters as
-#  of Puppet 2.6.)
-#
-# Examples
-# --------
-#
+# @param home home directory for the bamboo agent user
+# @param server_url url for the bamboo server the agent talks to
+# @param capabilities hash of custom capabilities for the agent
+# @param manage_user Create the bamboo service account(s)
+# @param manage_groups Create the groups specified for bamboo agent user
+# @param manage_home If set to true, will create the home directory for the bamboo agent user
+# @param username Username for bamboo-agent service account
+# @param user_groups A list of groups to add the bamboo-agent user too
+# @param manage_capabilities Whether the module should manage the capabilities file for the agent
+# @param wrapper_conf_properties Additonal java arguments to put in wrapper.conf
+
+# @example Create 2 puppet agents
 # @example
 #    class { 'bamboo_agent':
-#      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#    'bamboo-agent' => {
+#      home         => '/var/lib/bamboo-agent',
+#      server_url   => 'https://bamboo.knuedge.com',
+#      capabilities => {
+#        'system.builder.command.Bash' => '/bin/bash',
+#        'hostname'                    => $::hostname,
+#      },
+#      'wrapper_conf_properties' => {
+#        'wrapper.java.additional.4' => '-Djsse.enableSNIExtension=false',
+#        'wrapper.java.additional.2' => '-Dbamboo.agent.ignoreServerCertName=TRUE'
+#      }
+#    },
+#    'bamboo-agent2' => {
+#      home       => '/var/lib/bamboo-agent2',
+#      server_url => 'https://bamboo.knuedge.com',
 #    }
+#  }
+#}
 #
 # Authors
 # -------
 #
-# Author Name <author@domain.com>
+# Author Name dschaaff@knuedge.com
 #
 # Copyright
 # ---------
 #
-# Copyright 2017 Your name here, unless otherwise noted.
+# Copyright 2017 KnuEdge, Inc.
 #
+# @param agents hash of bamboo agents mapping to bamboo_agent::agent defined type
 class bamboo_agent (
   $agents,
   ){
@@ -49,7 +56,6 @@ class bamboo_agent (
 
   # user iteration and other defines to setup each agent
   $agents.each |$agent, $params| {
-    notice($agent,$params)
     bamboo_agent::agent{$agent:
       * => $params,
     }

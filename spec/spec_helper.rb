@@ -14,4 +14,3 @@ SimpleCov.start do
     SimpleCov::Formatter::Console
   ])
 end
-at_exit { RSpec::Puppet::Coverage.report! }

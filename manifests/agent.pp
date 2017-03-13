@@ -1,17 +1,35 @@
-# create the agent
+# defined type to create bamboo agents
+#
+#
+# @param home home directory for the bamboo agent user
+# @param server_url url for the bamboo server the agent talks to
+# @param capabilities hash of custom capabilities for the agent
+# @param manage_user Create the bamboo service account(s)
+# @param manage_groups Create the groups specified for bamboo agent user
+# @param manage_home If set to true, will create the home directory for the bamboo agent user
+# @param username Username for bamboo-agent service account
+# @param user_groups A list of groups to add the bamboo-agent user too
+# @param manage_capabilities Whether the module should manage the capabilities file for the agent
+# @param wrapper_conf_properties Additonal java arguments to put in wrapper.conf
 define bamboo_agent::agent(
   $home,
   $server_url,
   $capabilities = {},
   $manage_user = true,
+  $manage_groups = false,
   $manage_home = true,
   $username = $title,
-#  $user_groups = [],
+  $user_groups = [],
   $manage_capabilities = true,
   $wrapper_conf_properties = {},
   )
 {
 
+  if $manage_groups == true {
+    group {$user_groups:
+      ensure => present,
+    }
+  }
   # setup user
   if $manage_user == true {
     user { $username:
@@ -19,7 +37,7 @@ define bamboo_agent::agent(
       comment => "bamboo-agent ${username}",
       home    => $home,
       shell   => '/bin/bash',
-      #groups  => $user_groups,
+      groups  => $user_groups,
       system  => true,
     }
   }
@@ -30,22 +48,10 @@ define bamboo_agent::agent(
       owner  => $username,
     }
   }
-  # dowload the jar
-  exec {"download-${title}-bamboo-agent-jar":
-    command => "wget ${server_url}/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar",
-    cwd     => $home,
-    user    => $username,
-    path    => ['/usr/bin', '/bin'],
-    creates => "${home}/atlassian-bamboo-agent-installer.jar",
-    require => File[$home],
-  }
-  ->
-  exec { "install-${title}-bamboo-agent":
-    command => "java -jar -Dbamboo.home=${home} atlassian-bamboo-agent-installer.jar ${server_url}/agentServer/ install",
-    cwd     => $home,
-    user    => $username,
-    path    => [ '/bin', '/usr/bin', '/usr/local/bin' ],
-    creates => "${home}/bin/bamboo-agent.sh",
+  bamboo_agent::install {$username:
+    home       => $home,
+    username   => $username,
+    server_url => $server_url,
   }
   ~>
   if $manage_capabilities == true {
