@@ -5,8 +5,6 @@
 1. [Description](#description)
 1. [Setup - The basics of getting started with bamboo_agent](#setup)
     * [What bamboo_agent affects](#what-bamboo_agent-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with bamboo_agent](#beginning-with-bamboo_agent)
 1. [Usage - Configuration options and additional functionality](#usage)
 1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 1. [Limitations - OS compatibility, etc.](#limitations)
@@ -14,14 +12,7 @@
 
 ## Description
 
-Start with a one- or two-sentence summary of what the module does and/or what
-problem it solves. This is your 30-second elevator pitch for your module.
-Consider including OS/Puppet version it works with.
-
-You can give more descriptive information in a second paragraph. This paragraph
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?" If your module has a range of functionality (installation, configuration,
-management, etc.), this is the time to mention it.
+This module installs and manages remote bamboo agents. It supports multiple agents and can manage the capabilities and wrapper.conf files.
 
 ## Setup
 
@@ -38,33 +29,63 @@ If there's more that they should know about, though, this is the place to mentio
 * Dependencies that your module automatically installs.
 * Warnings or other important notices.
 
-### Setup Requirements **OPTIONAL**
+### Usage
 
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+The bamboo_agent class accepts a single parameter, agents, containing a hash of values that map directly onto the bamboo_agent::agent defined type. This example will create 2 bamboo agents, with custom capabilities and the wrapper.conf file managed for the first agent.
 
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section
-here.
+```
+class { 'bamboo_agent':
+  agents => {
+    'bamboo-agent' => {
+      home         => '/var/lib/bamboo-agent',
+      server_url   => 'https://bamboo.example.com',
+      capabilities => {
+        'system.builder.command.Bash' => '/bin/bash',
+        'hostname'                    => $::hostname,
+      },
+      'wrapper_conf_properties' => {
+        'wrapper.java.additional.4' => '-Djsse.enableSNIExtension=false',
+        'wrapper.java.additional.2' => '-Dbamboo.agent.ignoreServerCertName=TRUE'
+      }
+    },
+    'bamboo-agent2' => {
+      home       => '/var/lib/bamboo-agent2',
+      server_url => 'https://bamboo.example.com',
+    }
+  }
+}
+```
 
-### Beginning with bamboo_agent
 
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most
-basic use of the module.
-
-## Usage
-
-This section is where you describe how to customize, configure, and do the
-fancy stuff with your module here. It's especially helpful if you include usage
-examples and code samples for doing things with your module.
 
 ## Reference
 
-Here, include a complete list of your module's classes, types, providers,
-facts, along with the parameters for each. Users refer to this section (thus
-the name "Reference") to find specific details; most users don't read it per
-se.
+### Class `bamboo_agent` 
+The main class.
+#### Parameters
+* `agents`: Accepts a hash. See the bamboo_agent::agent defined type for accepted parameters
+
+### Defined Type`bamboo_agent::agent`
+#### Parameters
+* `home`: *requried* The home directory of the bamboo-agent user
+    - Default: unset
+* `server_url`: *required* The bamboo server url
+    - Default: unset
+* `capabilities`: *optional* Hash of custom capabilites
+    - Default: `{}`
+* `manage_user`: *optionl* Whether the module should create the user account
+    - Default: `true`
+* `manage_groups`: *optional* Whether the module should create groups specified in `$user_groups*``
+    - Default: `false`
+* `manage_home`: *optional* Whether the module should create the users home directory
+    - Default: `true`
+* `username`: *optional* The username of the bamboo-agent user
+    - Default: `$title`
+* `user_groups`: *optional* Groups bamboo-agent user should be a member of
+* `manage_capabilities`: *optional* Whether the module should manage the bamboo-agent's capabilities file
+    - Default: `true` 
+* `wrapper_conf_properties`: *optoinal* Options to be placed in the bamboo-agent's wrapper.conf file
+    - Default: `{}`
 
 ## Limitations
 
@@ -73,11 +94,9 @@ are Known Issues, you might want to include them under their own heading here.
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
+- Fork this module
+- Create a branch
+- Add tests for your changes
+- Submit a pull request
 
-## Release Notes/Contributors/Etc. **Optional**
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel
-are necessary or important to include here. Please use the `## ` header.
