@@ -14,10 +14,12 @@ define bamboo_agent::service(
         'xenial': {
           $init_path     = '/lib/systemd/system'
           $service_template = 'bamboo_agent/unit.erb'
+          $initscript = "${init_path}/${username}.service"
         }
         default: {
           $init_path = '/etc/init.d'
           $service_template = 'bamboo_agent/init.sh.erb'
+          $initscript = "${init_path}/${username}"
         }
       }
     }
@@ -26,20 +28,23 @@ define bamboo_agent::service(
         '7': {
           $init_path     = '/lib/systemd/system'
           $service_template = 'bamboo_agent/unit.erb'
+          $initscript = "${init_path}/${username}.service"
         }
         default: {
           $init_path = '/etc/init.d'
           $service_template = 'bamboo_agent/init.sh.erb'
+          $initscript = "${init_path}/${username}"
         }
       }
     }
     default: {
       $init_path = '/etc/init.d'
       $service_template = 'bamboo_agent/init.sh.erb'
+      $initscript = "${init_path}/${username}"
     }
   }
 
-  $initscript = "${init_path}/${username}"
+
 
   file {$initscript:
     ensure  => present,
