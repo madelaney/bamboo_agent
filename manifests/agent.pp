@@ -48,6 +48,7 @@ define bamboo_agent::agent(
       owner  => $username,
     }
   }
+  ->
   bamboo_agent::install {$username:
     home       => $home,
     username   => $username,
@@ -59,18 +60,21 @@ define bamboo_agent::agent(
       home         => $home,
       username     => $username,
       capabilities => $capabilities,
-      require      => User[$username]
+      require      => User[$username],
+      notify       => Service[$username]
     }
   }
 
   bamboo_agent::wrapper_conf {$username:
     home       => $home,
     properties => $wrapper_conf_properties,
+    notify     => Service[$username]
   }
 
   bamboo_agent::service{$username:
     username => $username,
     home     => $home,
+    require  => Bamboo_Agent::Install[$username]
   }
 
 }
