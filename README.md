@@ -59,6 +59,25 @@ class { 'bamboo_agent':
 }
 ```
 
+To use hiera
+```
+include bamboo_agent
+```
+
+```
+bamboo_agent::agents:
+  'bamboo-agent':
+    home: '/home/bamboo-agent'
+    user_groups:
+      - 'rvm'
+    server_url: 'https://bamboo.example.com'
+    capabilities:
+      hostname: "%{::hostname}"
+      os: "%{::operatingsystem}"
+    wrapper_conf_properties:
+      wrapper.java.additional.2: '-Dbamboo.agent.ignoreServerCertName=true'
+      wrapper.java.additional.3: '-Djsse.enableSNIExtension=false'
+```
 
 
 ## Reference
