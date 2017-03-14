@@ -28,7 +28,7 @@ BASE=<%= @home %>
 case "$1" in
   # Start command
   start)
-    chown -R <%= @user %>:<%= @group %> $BASE
+    chown -R <%= @username %>:<%= @username %> $BASE
     echo "Starting $APP"
     /bin/su - $USER -c "export BAMBOO_HOME=${BAMBOO_HOME}; $BASE/bin/bamboo-agent.sh start &> /dev/null"
     ;;
