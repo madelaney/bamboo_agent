@@ -48,7 +48,7 @@ define bamboo_agent::agent(
       owner  => $username,
     }
   }
-  ->
+
   bamboo_agent::install {$username:
     home       => $home,
     username   => $username,
