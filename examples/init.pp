@@ -11,10 +11,10 @@
 #
 class { 'bamboo_agent':
   agents => {
-    'bamboo-agent' => {
-      home         => '/var/lib/bamboo-agent',
-      server_url   => 'https://bamboo.example.com',
-      capabilities => {
+    'bamboo-agent'  => {
+      home                      => '/var/lib/bamboo-agent',
+      server_url                => 'https://bamboo.example.com',
+      capabilities              => {
         'system.builder.command.Bash' => '/bin/bash',
         'hostname'                    => $::hostname,
       },
