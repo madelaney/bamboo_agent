@@ -19,24 +19,25 @@
 # @example Create 2 puppet agents
 # @example
 #    class { 'bamboo_agent':
-#    'bamboo-agent' => {
-#      home         => '/var/lib/bamboo-agent',
-#      server_url   => 'https://bamboo.knuedge.com',
-#      capabilities => {
-#        'system.builder.command.Bash' => '/bin/bash',
-#        'hostname'                    => $::hostname,
+#     'agents' =>
+#        'bamboo-agent' => {
+#        home         => '/var/lib/bamboo-agent',
+#        server_url   => 'https://bamboo.example.com',
+#        capabilities => {
+#          'system.builder.command.Bash' => '/bin/bash',
+#          'hostname'                    => $::hostname,
+#        },
+#        'wrapper_conf_properties' => {
+#          'wrapper.java.additional.4' => '-Djsse.enableSNIExtension=false',
+#          'wrapper.java.additional.2' => '-Dbamboo.agent.ignoreServerCertName=TRUE'
+#        }
 #      },
-#      'wrapper_conf_properties' => {
-#        'wrapper.java.additional.4' => '-Djsse.enableSNIExtension=false',
-#        'wrapper.java.additional.2' => '-Dbamboo.agent.ignoreServerCertName=TRUE'
-#      }
-#    },
-#    'bamboo-agent2' => {
-#      home       => '/var/lib/bamboo-agent2',
-#      server_url => 'https://bamboo.knuedge.com',
+#        'bamboo-agent2' => {
+#          home       => '/var/lib/bamboo-agent2',
+#          server_url => 'https://bamboo.example.com',
+#        }
 #    }
 #  }
-#}
 #
 # Authors
 # -------

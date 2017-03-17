@@ -30,3 +30,5 @@ coverage/
 
 # puppet-strings
 doc/
+
+.yardoc
