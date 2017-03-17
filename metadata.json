@@ -1,6 +1,6 @@
 {
   "name": "knuedge-bamboo_agent",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Daniel Schaaff",
   "summary": "Puppet module for installing and managing remote bamboo agents",
   "license": "MIT",
