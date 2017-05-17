@@ -8,6 +8,10 @@ User=<%= @username %>
 Group=<%= @username %>
 ExecStart=<%= @home %>/bin/bamboo-agent.sh start
 ExecStop=<%= @home %>/bin/bamboo-agent.sh stop
+<% if @java_home -%>
+Environment=JAVA_HOME=<%= @java_home %>
+<% end %>
 
 [Install]
 WantedBy=multi-user.target
+

@@ -12,18 +12,18 @@
 # @param manage_capabilities Whether the module should manage the capabilities file for the agent
 # @param wrapper_conf_properties Additonal java arguments to put in wrapper.conf
 define bamboo_agent::agent (
-  String  $home,
-  String  $server_url,
-  Hash    $capabilities = {},
-  Boolean $manage_user = true,
-  Boolean $manage_groups = false,
-  Boolean $manage_home = true,
-  String  $username = $title,
-  String  $service_name = $title,
-  Array   $user_groups = [],
-  Boolean $manage_capabilities = true,
-  Hash    $wrapper_conf_properties = {},
-  Optional[String] $java_home = undef,
+  String           $home,
+  String           $server_url,
+  Hash             $capabilities            = {},
+  Boolean          $manage_user             = true,
+  Boolean          $manage_groups           = false,
+  Boolean          $manage_home             = true,
+  String           $username                = $title,
+  String           $service_name            = $title,
+  Array            $user_groups             = [],
+  Boolean          $manage_capabilities     = true,
+  Hash             $wrapper_conf_properties = {},
+  Optional[String] $java_home               = undef,
 ) {
 
   if $manage_groups == true {
