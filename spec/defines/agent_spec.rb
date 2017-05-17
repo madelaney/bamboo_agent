@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'bamboo_agent::agent' do
 
   on_supported_os.each do |os, facts|
+    puts "os: #{os}"
     context "on #{os}" do
       let(:facts) do
         facts.merge({

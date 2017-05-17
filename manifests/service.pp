@@ -2,8 +2,10 @@
 # @param username username of the bamboo-agent service account
 # @param home home directory of the bamboo-agent user
 define bamboo_agent::service(
-  $username,
-  $home,
+  String $username,
+  String $home,
+  String $service_name = $title,
+  Optional[String] $java_home,
   ){
 
   assert_private()
@@ -14,12 +16,12 @@ define bamboo_agent::service(
         'xenial': {
           $init_path     = '/lib/systemd/system'
           $service_template = 'bamboo_agent/unit.erb'
-          $initscript = "${init_path}/${username}.service"
+          $initscript = "${init_path}/${service_name}.service"
         }
         default: {
           $init_path = '/etc/init.d'
           $service_template = 'bamboo_agent/init.sh.erb'
-          $initscript = "${init_path}/${username}"
+          $initscript = "${init_path}/${service_name}"
         }
       }
     }
@@ -28,19 +30,19 @@ define bamboo_agent::service(
         '7': {
           $init_path     = '/lib/systemd/system'
           $service_template = 'bamboo_agent/unit.erb'
-          $initscript = "${init_path}/${username}.service"
+          $initscript = "${init_path}/${service_name}.service"
         }
         default: {
           $init_path = '/etc/init.d'
           $service_template = 'bamboo_agent/init.sh.erb'
-          $initscript = "${init_path}/${username}"
+          $initscript = "${init_path}/${service_name}"
         }
       }
     }
     default: {
       $init_path = '/etc/init.d'
       $service_template = 'bamboo_agent/init.sh.erb'
-      $initscript = "${init_path}/${username}"
+      $initscript = "${init_path}/${service_name}"
     }
   }
 
@@ -54,7 +56,7 @@ define bamboo_agent::service(
     content => template($service_template)
   }
 
-  service { $username:
+  service { $service_name:
     ensure  => running,
     enable  => true,
     require => File[$initscript]
