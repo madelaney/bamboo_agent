@@ -71,7 +71,7 @@ describe 'bamboo_agent' do
         it { should contain_bamboo_agent__install('test-agent2')}
         it do
           should contain_exec('download-test-agent-bamboo-agent-jar').with(
-            'command' => 'wget https://bamboo.example.com/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar',
+            'command' => 'wget --no-check-certificate https://bamboo.example.com/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar',
             'cwd'     => '/home/test-agent',
             'user'    => 'test-agent',
             'path'    => ['/usr/bin','/bin'],
@@ -79,7 +79,7 @@ describe 'bamboo_agent' do
         end
         it do
           should contain_exec('download-test-agent2-bamboo-agent-jar').with(
-            'command' => 'wget https://bamboo.example.com/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar',
+            'command' => 'wget --no-check-certificate https://bamboo.example.com/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar',
             'cwd'     => '/home/test-agent2',
             'user'    => 'test-agent2',
             'path'    => ['/usr/bin','/bin'],
