@@ -11,19 +11,20 @@
 # @param user_groups A list of groups to add the bamboo-agent user too
 # @param manage_capabilities Whether the module should manage the capabilities file for the agent
 # @param wrapper_conf_properties Additonal java arguments to put in wrapper.conf
-define bamboo_agent::agent(
-  $home,
-  $server_url,
-  $capabilities = {},
-  $manage_user = true,
-  $manage_groups = false,
-  $manage_home = true,
-  $username = $title,
-  $user_groups = [],
-  $manage_capabilities = true,
-  $wrapper_conf_properties = {},
-  )
-{
+define bamboo_agent::agent (
+  String           $home,
+  String           $server_url,
+  Hash             $capabilities            = {},
+  Boolean          $manage_user             = true,
+  Boolean          $manage_groups           = false,
+  Boolean          $manage_home             = true,
+  String           $username                = $title,
+  String           $service_name            = $title,
+  Array            $user_groups             = [],
+  Boolean          $manage_capabilities     = true,
+  Hash             $wrapper_conf_properties = {},
+  Optional[String] $java_home               = undef,
+) {
 
   if $manage_groups == true {
     group {$user_groups:
@@ -49,32 +50,34 @@ define bamboo_agent::agent(
     }
   }
 
-  bamboo_agent::install {$username:
+  bamboo_agent::install {$service_name:
     home       => $home,
     username   => $username,
     server_url => $server_url,
+    java_home  => $java_home,
   }
-  ~>
+
   if $manage_capabilities == true {
-    bamboo_agent::capabilities{$username:
+    bamboo_agent::capabilities{$service_name:
       home         => $home,
       username     => $username,
       capabilities => $capabilities,
-      require      => User[$username],
-      notify       => Service[$username]
+      require      => [ User[$username], Bamboo_agent::Install[$service_name], ],
+      notify       => Service[$service_name],
     }
   }
 
-  bamboo_agent::wrapper_conf {$username:
+  bamboo_agent::wrapper_conf {$service_name:
     home       => $home,
     properties => $wrapper_conf_properties,
-    notify     => Service[$username]
+    notify     => Service[$service_name]
   }
 
-  bamboo_agent::service{$username:
-    username => $username,
-    home     => $home,
-    require  => Bamboo_Agent::Install[$username]
+  bamboo_agent::service{$service_name:
+    username  => $username,
+    home      => $home,
+    java_home => $java_home,
+    require   => Bamboo_Agent::Install[$service_name],
   }
 
 }

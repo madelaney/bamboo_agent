@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'bamboo_agent::agent' do
 
   on_supported_os.each do |os, facts|
+    puts "os: #{os}"
     context "on #{os}" do
       let(:facts) do
         facts.merge({
@@ -42,7 +43,7 @@ describe 'bamboo_agent::agent' do
         it { should contain_bamboo_agent__install('test-agent')}
         it do
           should contain_exec('download-test-agent-bamboo-agent-jar').with(
-            'command' => 'wget https://bamboo.example.com/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar',
+            'command' => 'wget --no-check-certificate https://bamboo.example.com/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar',
             'cwd'     => '/home/test-agent',
             'user'    => 'test-agent',
             'path'    => ['/usr/bin','/bin'],

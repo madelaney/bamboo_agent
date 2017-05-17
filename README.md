@@ -52,6 +52,7 @@ class { 'bamboo_agent':
       }
     },
     'bamboo-agent2' => {
+      java_home  => '/etc/alternatives/jre_1.8.0',
       home       => '/var/lib/bamboo-agent2',
       server_url => 'https://bamboo.example.com',
     }
@@ -82,7 +83,7 @@ bamboo_agent::agents:
 
 ## Reference
 
-### Class `bamboo_agent` 
+### Class `bamboo_agent`
 The main class.
 #### Parameters
 * `agents`: Accepts a hash. See the bamboo_agent::agent defined type for accepted parameters
@@ -105,9 +106,13 @@ The main class.
     - Default: `$title`
 * `user_groups`: *optional* Groups bamboo-agent user should be a member of
 * `manage_capabilities`: *optional* Whether the module should manage the bamboo-agent's capabilities file
-    - Default: `true` 
+    - Default: `true`
 * `wrapper_conf_properties`: *optoinal* Options to be placed in the bamboo-agent's wrapper.conf file
     - Default: `{}`
+* `service_name`: *optional* Specify a unique name for the configured system service to be known as.
+    - Default: `$title`
+* `java_home`: *optional* Specify a value for the `JAVA_HOME` environment variable to include in the system init script.
+    - Default: unset
 
 ## Limitations
 

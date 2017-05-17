@@ -17,28 +17,28 @@
 #
 # It was then hacked on a bit to actually work. :-(
 
-# Define some variables
 # Name of app ( bamboo, Confluence, etc )
 APP=<%= @username %>
+
 # Name of the user to run as
 USER=<%= @username %>
+
 # Location of application's bin directory
 BASE=<%= @home %>
 
+export JAVA_HOME=<%= @java_home %>
+
 case "$1" in
-  # Start command
   start)
     chown -R <%= @username %>:<%= @username %> $BASE
     echo "Starting $APP"
-    /bin/su - $USER -c "export BAMBOO_HOME=${BAMBOO_HOME}; $BASE/bin/bamboo-agent.sh start &> /dev/null"
+    /bin/su - $USER -c "$BASE/bin/bamboo-agent.sh start &> /dev/null"
     ;;
-  # Stop command
   stop)
     echo "Stopping $APP"
     /bin/su - $USER -c "$BASE/bin/bamboo-agent.sh stop &> /dev/null"
     echo "$APP stopped successfully"
     ;;
-  # Restart command
   restart)
     $0 stop
     sleep 5
