@@ -28,6 +28,8 @@ vendor/
 # testing
 coverage/
 
+# Puppet Forge
+pkg
 # puppet-strings
 doc/
 
