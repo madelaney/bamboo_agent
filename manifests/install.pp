@@ -14,8 +14,8 @@ define bamboo_agent::install (
   assert_private()
 
   $path = $java_home ? {
-    Undef   => [ "${java_home}/bin", '/bin', '/usr/bin', '/usr/local/bin' ],
-    default => [ '/bin', '/usr/bin', '/usr/local/bin' ],
+    Undef   => [ '/bin', '/usr/bin', '/usr/local/bin' ],
+    default => [ "${java_home}/bin", '/bin', '/usr/bin', '/usr/local/bin' ],
   }
 
   exec {"download-${title}-bamboo-agent-jar":
@@ -31,7 +31,7 @@ define bamboo_agent::install (
     command => "java -jar -Dbamboo.home=${home} atlassian-bamboo-agent-installer.jar ${server_url}/agentServer/ install",
     cwd     => $home,
     user    => $username,
-    path    => [ "${java_home}/bin", '/bin', '/usr/bin', '/usr/local/bin' ],
+    path    => $path,
     creates => "${home}/bin/bamboo-agent.sh",
     require => Exec["download-${title}-bamboo-agent-jar"],
   }
