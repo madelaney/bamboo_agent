@@ -5,7 +5,7 @@ define bamboo_agent::service (
   String           $username,
   String           $home,
   String           $service_name = $title,
-  Optional[String] $java_home,
+  Optional[String] $java_home = undef,
 ) {
 
   assert_private()
