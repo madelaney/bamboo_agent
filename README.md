@@ -109,7 +109,9 @@ The main class.
     - Default: `true`
 * `wrapper_conf_properties`: *optoinal* Options to be placed in the bamboo-agent's wrapper.conf file
     - Default: `{}`
-* `java_home`: *optoinal* Specify a value for the `JAVA_HOME` environment variable to include in the system init script.
+* `service_name`: *optional* Specify a unique name for the configured system service to be known as.
+    - Default: `$title`
+* `java_home`: *optional* Specify a value for the `JAVA_HOME` environment variable to include in the system init script.
     - Default: unset
 
 ## Limitations
