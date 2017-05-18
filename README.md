@@ -111,6 +111,8 @@ The main class.
     - Default: `{}`
 * `service_name`: *optional* Specify a unique name for the configured system service to be known as.
     - Default: `$title`
+* `check_certificate`: *optional* Whether to have wget check the certificate of the Bamboo server when downloading the installer jar
+    - Default: `true`
 * `java_home`: *optional* Specify a value for the `JAVA_HOME` environment variable to include in the system init script.
     - Default: unset
 

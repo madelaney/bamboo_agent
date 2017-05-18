@@ -23,6 +23,7 @@ define bamboo_agent::agent (
   Array            $user_groups             = [],
   Boolean          $manage_capabilities     = true,
   Hash             $wrapper_conf_properties = {},
+  Boolean          $check_certificate       = true,
   Optional[String] $java_home               = undef,
 ) {
 
@@ -51,14 +52,15 @@ define bamboo_agent::agent (
   }
 
   bamboo_agent::install {$service_name:
-    home       => $home,
-    username   => $username,
-    server_url => $server_url,
-    java_home  => $java_home,
+    home              => $home,
+    username          => $username,
+    server_url        => $server_url,
+    check_certificate => $check_certificate,
+    java_home         => $java_home,
   }
 
   if $manage_capabilities == true {
-    bamboo_agent::capabilities{$service_name:
+    bamboo_agent::capabilities { $service_name:
       home         => $home,
       username     => $username,
       capabilities => $capabilities,
@@ -67,13 +69,13 @@ define bamboo_agent::agent (
     }
   }
 
-  bamboo_agent::wrapper_conf {$service_name:
+  bamboo_agent::wrapper_conf { $service_name:
     home       => $home,
     properties => $wrapper_conf_properties,
     notify     => Service[$service_name]
   }
 
-  bamboo_agent::service{$service_name:
+  bamboo_agent::service { $service_name:
     username  => $username,
     home      => $home,
     java_home => $java_home,
