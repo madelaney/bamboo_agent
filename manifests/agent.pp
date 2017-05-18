@@ -11,6 +11,8 @@
 # @param user_groups A list of groups to add the bamboo-agent user too
 # @param manage_capabilities Whether the module should manage the capabilities file for the agent
 # @param wrapper_conf_properties Additonal java arguments to put in wrapper.conf
+# @param check_certificate Whether to have wget check the certificate of the Bamboo server when downloading the installer jar
+# @param java_home Specify a value for the `JAVA_HOME` environment variable to include in the system init script
 define bamboo_agent::agent (
   String           $home,
   String           $server_url,
