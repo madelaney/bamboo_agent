@@ -5,12 +5,12 @@
 # @param username username of the bamboo-agent account
 # @param server_url the url for the bamboo server
 define bamboo_agent::install (
-  String $home,
-  String $username,
-  String $server_url,
-  Optional[String] $java_home = undef,
-  )
-{
+  String           $home,
+  String           $username,
+  String           $server_url,
+  Boolean          $check_certificate = true,
+  Optional[String] $java_home         = undef,
+) {
   assert_private()
 
   $path = $java_home ? {
@@ -18,8 +18,13 @@ define bamboo_agent::install (
     default => [ "${java_home}/bin", '/bin', '/usr/bin', '/usr/local/bin' ],
   }
 
+  $no_check_cert_flag = $check_certificate ? {
+    false   => '--no-check-certificate',
+    default => ''
+  }
+
   exec {"download-${title}-bamboo-agent-jar":
-    command => "wget --no-check-certificate ${server_url}/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar",
+    command => "wget ${no_check_cert_flag} ${server_url}/agentServer/agentInstaller/atlassian-bamboo-agent-installer.jar",
     cwd     => $home,
     user    => $username,
     path    => ['/usr/bin', '/bin'],

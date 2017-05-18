@@ -51,13 +51,12 @@
 #
 # @param agents hash of bamboo agents mapping to bamboo_agent::agent defined type
 class bamboo_agent (
-  $agents,
-  ){
-
+  Hash $agents = {},
+) {
 
   # user iteration and other defines to setup each agent
-  $agents.each |$agent, $params| {
-    bamboo_agent::agent{$agent:
+  $agents.each |String $agent, Hash $params| {
+    bamboo_agent::agent { $agent:
       * => $params,
     }
   }
