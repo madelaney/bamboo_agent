@@ -31,6 +31,8 @@ export JAVA_HOME=<%= @java_home %>
 case "$1" in
   start)
     chown -R <%= @username %>:<%= @username %> $BASE
+    echo "Setting max locked memory"
+    ulimit -l unlimited
     echo "Starting $APP"
     /bin/su - $USER -c "$BASE/bin/bamboo-agent.sh start &> /dev/null"
     ;;
