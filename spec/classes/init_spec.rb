@@ -39,7 +39,7 @@ describe 'bamboo_agent' do
       end
       context 'it should create the user' do
         it do
-          should contain_group('foo')
+          should contain_group('bamboo_agent_foo')
         end
         it do should contain_user('test-agent').with(
           'ensure'  => 'present',
