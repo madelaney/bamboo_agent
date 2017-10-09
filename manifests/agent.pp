@@ -29,11 +29,16 @@ define bamboo_agent::agent (
   Optional[String] $java_home               = undef,
 ) {
 
+  # Ensure all groups are created
   if $manage_groups == true {
-    group {$user_groups:
-      ensure => present,
+    $user_groups.each |$group_name| {
+      group { "bamboo_agent_${group_name}":
+        ensure => present,
+        name   => $group_name,
+      }
     }
   }
+
   # setup user
   if $manage_user == true {
     user { $username:
