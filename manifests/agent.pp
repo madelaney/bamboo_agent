@@ -31,10 +31,13 @@ define bamboo_agent::agent (
 
   # Ensure all groups are created
   if $manage_groups == true {
+
     $user_groups.each |$group_name| {
-      group { "bamboo_agent_${group_name}":
-        ensure => present,
-        name   => $group_name,
+      if ! defined(Group[$group_name]) {
+        group { $group_name:
+          ensure => present,
+          name   => $group_name,
+        }
       }
     }
   }
