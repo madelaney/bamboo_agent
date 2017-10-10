@@ -1,4 +1,4 @@
-# 2017-10-09 - Release 0.1.3
+# 2017-10-09 - Release 0.1.6
 - Change resource name for group to avoid collisions
 - Add ulimit settings to init template
 
