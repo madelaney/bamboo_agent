@@ -13,6 +13,8 @@
 # @param wrapper_conf_properties Additonal java arguments to put in wrapper.conf
 # @param check_certificate Whether to have wget check the certificate of the Bamboo server when downloading the installer jar
 # @param java_home Specify a value for the `JAVA_HOME` environment variable to include in the system init script
+# @param uid Specify a value for the bamboo agent's user id
+# @param gid Specify a value for the bamboo agent's group id
 define bamboo_agent::agent (
   String           $home,
   String           $server_url,
