@@ -115,6 +115,10 @@ The main class.
     - Default: `true`
 * `java_home`: *optional* Specify a value for the `JAVA_HOME` environment variable to include in the system init script.
     - Default: unset
+* `uid`: *optional* Specify a value for the bamboo agent's user ID.
+    - Default: unset
+* `gid`: *optional* Specify a value for the bamboo agent's group ID.
+    - Default: unset
 
 ## Limitations
 

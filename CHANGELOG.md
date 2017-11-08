@@ -1,3 +1,6 @@
+# 2017-11-08 - Release 0.1.7
+- Add passing in agent user id and group id
+
 # 2017-10-09 - Release 0.1.6
 - Change resource name for group to avoid collisions
 - Add ulimit settings to init template
