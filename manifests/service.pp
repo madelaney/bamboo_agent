@@ -6,6 +6,8 @@ define bamboo_agent::service (
   String           $home,
   String           $service_name = $title,
   Optional[String] $java_home = undef,
+  Optional[String] $template = undef,
+  Optional[Hash]   $systemd_opts = {}
 ) {
 
   assert_private()
@@ -46,12 +48,19 @@ define bamboo_agent::service (
     }
   }
 
+  if $template {
+    $_real_service_template = $template
+  }
+  else {
+    $_real_service_template = $service_template
+  }
+
   file {$initscript:
     ensure  => present,
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    content => template($service_template),
+    content => template($_real_service_template),
   }
 
   service { $service_name:

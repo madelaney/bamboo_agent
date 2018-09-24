@@ -11,6 +11,11 @@ ExecStop=<%= @home %>/bin/bamboo-agent.sh stop
 <% if @java_home -%>
 Environment=JAVA_HOME=<%= @java_home %>
 <% end %>
+<% unless @systemd_opts.empty? -%>
+<% @systemd_opts.each do |k,v| -%>
+<%= k %>=<%= v %>
+<% end -%>
+<% end -%>
 
 [Install]
 WantedBy=multi-user.target

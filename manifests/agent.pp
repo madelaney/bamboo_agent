@@ -31,6 +31,8 @@ define bamboo_agent::agent (
   Optional[String] $java_home               = undef,
   Optional[String] $uid                     = undef,
   Optional[String] $gid                     = undef,
+  Optional[String] $template                = undef,
+  Optional[Hash]   $systemd_opts            = {},
 ) {
 
   # Ensure all groups are created
@@ -103,10 +105,12 @@ define bamboo_agent::agent (
   }
 
   bamboo_agent::service { $service_name:
-    username  => $username,
-    home      => $home,
-    java_home => $java_home,
-    require   => Bamboo_Agent::Install[$service_name],
+    username     => $username,
+    home         => $home,
+    java_home    => $java_home,
+    require      => Bamboo_Agent::Install[$service_name],
+    template     => $template,
+    systemd_opts => $systemd_opts,
   }
 
 }
